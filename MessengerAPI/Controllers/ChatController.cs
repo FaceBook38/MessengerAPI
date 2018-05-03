@@ -4,14 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MessengerAPI
+namespace MessengerAPI.Controllers
 {
-    public class HomeController : Controller
+    public class ChatController : Controller
     {
-        public ActionResult Index()
+        // GET: Chat
+        public ActionResult Chat()
         {
-            ViewBag.Title = "Home Page";
-
             return View();
         }
     }

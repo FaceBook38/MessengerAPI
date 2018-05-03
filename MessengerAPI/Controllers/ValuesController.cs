@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace MessengerAPI.Controllers
+namespace MessengerAPI
 {
     public class ValuesController : ApiController
     {

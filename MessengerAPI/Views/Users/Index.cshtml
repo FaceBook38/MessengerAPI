@@ -1,0 +1,95 @@
+﻿@model IEnumerable<MessengerAPI.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+@section Scripts {
+    <script src="~/Scripts/jquery-1.6.4.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.1.2.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        function loading() {
+            
+            var chatProxy = $.connection.Chat;
+            $.connection.hub.start().done(function() {
+                // Wire up Send button to call NewContosoChatMessage on the server.
+                $('#messInput').click(function() {
+                    chatProxy.server.sendmessage($("#messText").val(),
+                        2,
+                        @Session["user_id"]);
+                    $('#messText').val('').focus();
+                });
+
+            });
+            chatProxy.client.send = function(message) {
+                console.log("Client method");
+                $('#Messages').append('<li>' + message + '</li>');
+
+
+            }
+        }
+        $(function () {
+        });
+
+
+    </script>
+
+}
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th> off/online </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserImage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @if (ChatHub.ConnectedUsers.Find(u => u.UserId == item.UserId) != null)
+                {
+                    <img src="/images/online.png" width="20" height="20" />
+                }
+                else
+                {
+                    <img src="/images/offline.png" width="20" height="20" />
+                }
+            </td>
+            @{
+                if (item.UserImage == null)
+                {
+                    <td></td>
+                }
+
+                if (item.UserImage != null)
+                {
+                    String img64 = Convert.ToBase64String(item.UserImage);
+                    String img64Url = string.Format("data:image/" + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
+                    <td><img src="@img64Url" width="60" height="60" /></td>
+                } }
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+            </td>
+        </tr>
+    }
+
+</table>

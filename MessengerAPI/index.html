@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <a href="index.html">index.html</a>
+    <script src="Scripts/jquery-1.6.4.js"></script>
+    <script src="Scripts/jquery.signalR-2.1.2.js"></script>
+    <script src="signalr/hubs"></script>
+</head>
+<body>
+<input type="text" placeholder="Message" id="messText" />
+<input type="button" value="Send" id="messInput"/>
+<div >
+    <ul id="Messages"></ul>
+</div>
+<script>
+    var chatProxy = $.connection.Chat;
+    
+   
+    $.connection.hub.start().done(function () {
+        // Wire up Send button to call NewContosoChatMessage on the server.
+        $('#messInput').click(function () {
+            chatProxy.server.sendmessage($("#messText").val(),1, 2);
+            $('#messText').val('').focus();
+        });
+       
+    });
+    chatProxy.client.send = function (message) {
+        console.log("Client method");
+        $('#Messages').append('<li>' + message + '</li>');
+
+        
+    }
+    
+</script>
+</body>
+</html>
