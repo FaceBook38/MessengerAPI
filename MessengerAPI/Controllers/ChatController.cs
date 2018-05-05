@@ -16,14 +16,13 @@ namespace MessengerAPI.Controllers
             OldMessages oldMessages = new OldMessages();
              oldMessages.Receiver= context.Users.FirstOrDefault(user0 => user0.UserId == id);
              oldMessages.Sender= context.Users.FirstOrDefault(user0 => user0.UserId == senderId);
-              oldMessages.oldMessages = context.UserMessages.Where(m => m.SenderId ==senderId && m.ReceiverId == id && m.SenderId == id && m.ReceiverId == senderId).ToList();
+              oldMessages.oldMessages = context.UserMessages.Where(m => ((m.SenderId ==senderId && m.ReceiverId == id) || (m.SenderId == id && m.ReceiverId == senderId))).ToList();
 
             if (id == null)
                 return RedirectToAction("index", "users");
             else
                 if(oldMessages.Receiver != null)
                  return View(oldMessages);
-
             return RedirectToAction("index", "users");
 
 

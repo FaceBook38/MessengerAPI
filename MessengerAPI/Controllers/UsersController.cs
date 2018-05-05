@@ -20,8 +20,8 @@ namespace MessengerAPI.Controllers
         // GET: Users
         public ActionResult Index()
         {
-
-            return View(db.Users.ToList());
+            int senderid = Convert.ToInt32(Session["user_id"]);
+            return View(db.Users.Where(u=>u.UserId!=senderid).ToList());
         }
 
         // GET: Users/Details/5

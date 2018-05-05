@@ -12,21 +12,26 @@
     <div>
         <ul id="Messages">
             @foreach (var item in Model.oldMessages)
-            {
-                if (Model.Sender.UserId == item.SenderId)
-                {<li> @Model.Sender.UserName @item.MessageDate @item.MessageContent</li>}
-                else
-                {
-                    if (Model.Receiver.UserId == item.ReceiverId)
+    {
+        if (Model.Sender.UserId == item.SenderId)
+        {
+            <h4>
+                @Model.Sender.UserName
+            </h4>
+            <li> @item.MessageDate @item.MessageContent</li>}
+if (Model.Receiver.UserId == item.SenderId)
 
-                    {<li> @Model.Receiver.UserName @item.MessageDate @item.MessageContent</li>}
+{
+            <h4>
+                @Model.Receiver.UserName
+            </h4>
+        <li>  @item.MessageDate @item.MessageContent</li>}
 
-                }
-                @*if(item.SenderId==Convert.ToInt32(Session["user_id"]))
-                   <p> @item.MessageContent </p>*@
+        @*if(item.SenderId==Convert.ToInt32(Session["user_id"]))
+    <p> @item.MessageContent </p>*@
 
 
-            }
+}
         </ul>
     </div>
     @section Scripts{
