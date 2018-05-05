@@ -186,6 +186,11 @@ namespace MessengerAPI.Controllers
             return View();
         }
 
-        
+
+        public ActionResult Logout()
+        {
+            Session["user_id"] = null;
+            return RedirectToAction("Login");
+        }
     }
 }

@@ -2,6 +2,7 @@ namespace MessengerAPI
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
@@ -28,5 +29,12 @@ namespace MessengerAPI
         public virtual User User { get; set; }
 
         public virtual User User1 { get; set; }
+
+        public UserMessage()
+        {
+            Read = Received = false;
+            MessageDate = DateTime.Now;
+        }
     }
+
 }

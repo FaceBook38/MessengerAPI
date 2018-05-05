@@ -41,6 +41,14 @@ namespace MessengerAPI
             }
             return base.OnConnected();
         }
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            string cId = Context.ConnectionId;
+          var user=  ConnectedUsers.Find(u => u.ConnectionId == cId);
+            if (user != null)
+                ConnectedUsers.Remove(user);
+            return base.OnDisconnected(stopCalled);
+        }
 
         public void sendmessage(string message, int receiverId, int senderId)
         {
@@ -48,13 +56,15 @@ namespace MessengerAPI
 
             //recevier connection id
             ConnectedUser receiver = ConnectedUsers.FirstOrDefault(c => c.UserId == receiverId);
+            User sender = _ctx.Users.FirstOrDefault(c => c.UserId == senderId);
+
             if (receiver != null)
             {
-                Clients.Client(receiver.ConnectionId).send(message);
+                Clients.Client(receiver.ConnectionId).send(message,sender.UserName);
             }
             //
             //Clients.All.send(message);
-            Clients.Caller.send(message);
+            Clients.Caller.send(message,sender.UserName);
 
             //save message in DB
             _ctx.UserMessages.Add(new UserMessage()

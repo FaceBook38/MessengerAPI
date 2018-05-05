@@ -79,9 +79,10 @@
                 } }
 
 
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
+                    <td>
+                        @Html.ActionLink(item.UserName, "Chat","chat", new { id = item.UserId }, new { @class = "none" })
+                        @*@Html.DisplayFor(modelItem => item.UserName)*@
+                    </td>
 
 
             <td>
