@@ -1,4 +1,4 @@
-﻿@model  MessengerAPI.User
+﻿@model  MessengerAPI.Models.MessengerModel.OldMessages
 <html>
 <head>
     <meta charset="utf-8" />
@@ -10,7 +10,24 @@
     <input type="text" placeholder="Message" id="messText" />
     <input type="button" value="Send" id="messInput" />
     <div>
-        <ul id="Messages"></ul>
+        <ul id="Messages">
+            @foreach (var item in Model.oldMessages)
+            {
+                if (Model.Sender.UserId == item.SenderId)
+                {<li> @Model.Sender.UserName @item.MessageDate @item.MessageContent</li>}
+                else
+                {
+                    if (Model.Receiver.UserId == item.ReceiverId)
+
+                    {<li> @Model.Receiver.UserName @item.MessageDate @item.MessageContent</li>}
+
+                }
+                @*if(item.SenderId==Convert.ToInt32(Session["user_id"]))
+                   <p> @item.MessageContent </p>*@
+
+
+            }
+        </ul>
     </div>
     @section Scripts{
         <script src="~/Scripts/jquery-1.6.4.min.js"></script>
@@ -24,21 +41,21 @@
                 // Wire up Send button to call NewContosoChatMessage on the server.
                 $('#messInput').click(function () {
                     chatProxy.server.sendmessage($("#messText").val(),
-                      @Model.UserId ,
+                      @Model.Receiver.UserId ,
                         @Session["user_id"]);
                     $('#messText').val('').focus();
                 });
 
             });
-            @{ 
-                
-            }
+           
             chatProxy.client.send = function (message, name) {
                 console.log("Client method");
                 $('#Messages').append('<h4>' + name + '</h4><li>' + message + '</li>');
 
 
             }
+
+            
 
 
         </script>

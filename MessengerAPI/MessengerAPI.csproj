@@ -212,6 +212,7 @@
     <Compile Include="Models\MessengerModel\Group.cs" />
     <Compile Include="Models\MessengerModel\GroupMessage.cs" />
     <Compile Include="Models\MessengerModel\MessengerContext.cs" />
+    <Compile Include="Models\MessengerModel\OldMessages.cs" />
     <Compile Include="Models\MessengerModel\User.cs" />
     <Compile Include="Models\MessengerModel\UserMessage.cs" />
     <Compile Include="Models\SignalRModels\ConnectedUser.cs" />
