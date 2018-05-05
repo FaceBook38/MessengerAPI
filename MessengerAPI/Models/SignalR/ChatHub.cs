@@ -64,7 +64,7 @@ namespace MessengerAPI
             }
             //
             //Clients.All.send(message);
-            Clients.Caller.send(message,sender.UserName);
+            Clients.Caller.send(message,sender.UserName, receiverId);
 
             //save message in DB
             _ctx.UserMessages.Add(new UserMessage()

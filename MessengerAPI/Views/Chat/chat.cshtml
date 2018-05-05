@@ -4,36 +4,101 @@
     <meta charset="utf-8" />
     <title></title>
 
-
+    <link href="~/Styles/chatStyle.css" rel="stylesheet" />
 </head>
 <body>
-    <input type="text" placeholder="Message" id="messText" />
-    <input type="button" value="Send" id="messInput" />
-    <div>
-        <ul id="Messages">
-            @foreach (var item in Model.oldMessages)
+
+        @*<input type="text" placeholder="Message" id="messText" />
+        <input type="button" value="Send" id="messInput" />*@
+        @*<div>
+            <ul id="Messages">
+                @foreach (var item in Model.oldMessages)
+            {
+                if (Model.Sender.UserId == item.SenderId)
+                {
+                    <h4>
+                        @Model.Sender.UserName
+                    </h4>
+                    <li> @item.MessageDate @item.MessageContent</li>}
+            if (Model.Receiver.UserId == item.SenderId)
+
+            {
+                <h4>
+                    @Model.Receiver.UserName
+                </h4>
+                <li>  @item.MessageDate @item.MessageContent</li>}
+              }
+            </ul>
+        </div>*@
+
+
+
+        <div class="col-sm-3 col-sm-offset-4 frame" style="margin-top:20px">
+            <ul id="pla">
+                @foreach (var item in Model.oldMessages)
     {
         if (Model.Sender.UserId == item.SenderId)
         {
-            <h4>
-                @Model.Sender.UserName
-            </h4>
-            <li> @item.MessageDate @item.MessageContent</li>}
-if (Model.Receiver.UserId == item.SenderId)
-
-{
-            <h4>
-                @Model.Receiver.UserName
-            </h4>
-        <li>  @item.MessageDate @item.MessageContent</li>}
-
-        @*if(item.SenderId==Convert.ToInt32(Session["user_id"]))
-    <p> @item.MessageContent </p>*@
-
+            <li style="width:100%;">
+                <div class="msj-rta macro">
+                    <div class="text text-r">
+                        <p> @item.MessageContent </p>
+                        <p><small> @item.MessageDate</small></p>
+                    </div>
+                    <div class="avatar" style="padding:0px 0px 0px 10px !important">
+                        <img class="img-circle" style="width:100%;" src="@string.Format("data:image/" + ";base64,{0}", Convert.ToBase64String(Model.Sender.UserImage))" title=@Model.Sender.UserName />
+                    </div>
+                </div>
+            </li>
 
 }
-        </ul>
-    </div>
+if (Model.Receiver.UserId == item.SenderId)
+{
+            <li style="width:100%;">
+                <div class="msj macro">
+                    <div class="avatar">
+                        <img class="img-circle" style="width:100%;" src="@string.Format("data:image/" + ";base64,{0}", Convert.ToBase64String(Model.Receiver.UserImage))" title=@Model.Receiver.UserName />
+                    </div>
+                    <div class="text text-l">
+                        <p> @item.MessageContent </p>
+                        <p><small> @item.MessageDate</small></p>
+                    </div>
+
+                </div>
+            </li>
+            
+}
+}
+
+
+
+
+            </ul>
+            <div>
+                <div class="msj-rta macro">
+                    <div class="text text-r" style="background:whitesmoke !important">
+                        <input class="mytext" placeholder="Type a message" id="messText" />
+                    </div>
+                </div>
+                
+                <div style="padding:10px;">
+                    <span class="glyphicon glyphicon-share-alt" id="messInput"></span>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        function formatAMPM(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            return strTime;
+        }          
+    </script>
     @section Scripts{
         <script src="~/Scripts/jquery-1.6.4.min.js"></script>
         <script src="~/Scripts/jquery.signalR-2.1.2.js"></script>
@@ -52,15 +117,43 @@ if (Model.Receiver.UserId == item.SenderId)
                 });
 
             });
-           
-            chatProxy.client.send = function (message, name) {
-                console.log("Client method");
-                $('#Messages').append('<h4>' + name + '</h4><li>' + message + '</li>');
+
+            chatProxy.client.send = function (message, name, receiverId) {
+
+                var control = "";
+                var date = formatAMPM(new Date());
+
+                if (@Model.Receiver.UserId == receiverId) {
+                    @{
+                        String img64 = Convert.ToBase64String(Model.Receiver.UserImage);
+                        String img64Url = string.Format("data:image/;base64,{0}", img64);
+                    }
+                    control = '<li style="width:100%">' +
+                        '<div class="msj macro">' +
+                        '<div class="avatar"><img class="img-circle" style="width:100%;" src="@img64Url" title='+name+'  /></div>' +
+                        '<div class="text text-l">' +
+                        '<p>' + message + '</p>' +
+                        '<p><small>' + date + '</small></p>' +
+                        '</div>' +
+                        '</div>' +
+                        '</li>';
+                } else {
+                    control = '<li style="width:100%;">' +
+                        '<div class="msj-rta macro">' +
+                        '<div class="text text-r">' +
+                        '<p>' + message + '</p>' +
+                        '<p><small>' + date + '</small></p>' +
+                        '</div>' +
+                        '<div class="avatar" style="padding:0px 0px 0px 10px !important"><img class="img-circle" style="width:100%;" src="@string.Format("data:image/" + ";base64,{0}", Convert.ToBase64String(Model.Sender.UserImage))" title='+name+' /></div>' +
+                        '</li>';
+                }
+                $("#pla").append(control).scrollTop($("#pla").prop('scrollHeight'));
+
 
 
             }
 
-            
+
 
 
         </script>
